@@ -22,7 +22,7 @@ public class MovieDownloader {
 
 		//construct the url for the omdbapi API
 		String urlString = "";
-		try {
+		try { // try to encode string movie in URLEncoder (escape special chars for url formatting)
 			urlString = "http://www.omdbapi.com/?s=" + URLEncoder.encode(movie, "UTF-8") + "&type=movie";
 		}catch(UnsupportedEncodingException uee){
 			return null;
@@ -35,20 +35,20 @@ public class MovieDownloader {
 
 		try {
 
-			URL url = new URL(urlString);
+			URL url = new URL(urlString); // create new URL instance
 
-			urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("GET");
-			urlConnection.connect();
+			urlConnection = (HttpURLConnection) url.openConnection(); // Opens up an HTTP connection to the url
+			urlConnection.setRequestMethod("GET"); // sets request method to "GET", rather than "POST"
+			urlConnection.connect(); // connects to the API
 
-			InputStream inputStream = urlConnection.getInputStream();
-			StringBuffer buffer = new StringBuffer();
-			if (inputStream == null) {
+			InputStream inputStream = urlConnection.getInputStream(); // the input stream of information getting retrieved from the specified url connection
+			StringBuffer buffer = new StringBuffer(); // buffer instance to read the input stream
+			if (inputStream == null) { // if nothing coming from the input stream, then return
 				return null;
 			}
-			reader = new BufferedReader(new InputStreamReader(inputStream));
+			reader = new BufferedReader(new InputStreamReader(inputStream)); // using the buffer to read the input stream of bytes coming from our HTTP connection to the specified url
 
-			String line = reader.readLine();
+			String line = reader.readLine(); // Reads line
 			while (line != null) {
 				buffer.append(line + "\n");
 				line = reader.readLine();
